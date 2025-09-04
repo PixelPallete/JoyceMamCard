@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up event listeners
     setupEventListeners();
     
-    // Don't start initial animations or confetti until curtain opens
-    // startInitialAnimations();
+    // Start initial animations
+    startInitialAnimations();
     
-    // Don't create initial confetti - wait for reveal
-    // setTimeout(() => {
-    //     createConfetti(50);
-    // }, 2000);
+    // Create initial confetti after page load
+    setTimeout(() => {
+        createConfetti(50);
+    }, 2000);
 });
 
 function initializeCard() {
@@ -29,12 +29,6 @@ function initializeCard() {
 }
 
 function setupEventListeners() {
-    // Reveal button (curtain opener)
-    const revealBtn = document.getElementById('revealBtn');
-    if (revealBtn) {
-        revealBtn.addEventListener('click', openCurtain);
-    }
-    
     // Celebrate button
     const celebrateBtn = document.getElementById('celebrateBtn');
     if (celebrateBtn) {
@@ -68,46 +62,6 @@ function setupEventListeners() {
     }
 }
 
-function openCurtain() {
-    console.log('Opening curtain with celebration!');
-    
-    // Play dramatic reveal sound
-    playRevealSound();
-    
-    // Get curtain elements
-    const curtainLeft = document.querySelector('.curtain-left');
-    const curtainRight = document.querySelector('.curtain-right');
-    const curtainOverlay = document.getElementById('curtain-overlay');
-    
-    // Open the curtains
-    if (curtainLeft && curtainRight) {
-        curtainLeft.classList.add('open');
-        curtainRight.classList.add('open');
-    }
-    
-    // Create massive confetti explosion
-    setTimeout(() => {
-        createConfetti(150);
-        createFloatingHearts();
-    }, 500);
-    
-    // Hide curtain overlay after animation
-    setTimeout(() => {
-        if (curtainOverlay) {
-            curtainOverlay.classList.add('hidden');
-        }
-        
-        // Start the card animations
-        startInitialAnimations();
-        
-        // Create additional confetti
-        setTimeout(() => {
-            createConfetti(75);
-        }, 1000);
-        
-    }, 2500);
-}
-
 function startInitialAnimations() {
     // Stagger animation for appreciation icons
     const icons = document.querySelectorAll('.appreciation-icon');
@@ -115,7 +69,7 @@ function startInitialAnimations() {
         setTimeout(() => {
             icon.style.animation = `iconFloat 3s ease-in-out infinite, iconPop 0.5s ease-out`;
             icon.style.animationDelay = `${index * 0.2}s`;
-        }, 500 + (index * 200));
+        }, 2000 + (index * 200));
     });
 }
 
@@ -256,41 +210,6 @@ function initializeAudio() {
     // Initialize AudioContext for sound effects
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-}
-
-function playRevealSound() {
-    try {
-        // Create a dramatic reveal sound using Web Audio API
-        if (!audioContext) {
-            initializeAudio();
-        }
-        
-        // Dramatic rising chord progression
-        const revealProgression = [
-            {freq: 261.63, delay: 0},    // C4
-            {freq: 329.63, delay: 200},  // E4
-            {freq: 392.00, delay: 400},  // G4
-            {freq: 523.25, delay: 600},  // C5
-            {freq: 659.25, delay: 800},  // E5
-            {freq: 783.99, delay: 1000}, // G5
-            {freq: 1046.50, delay: 1200} // C6
-        ];
-        
-        revealProgression.forEach(note => {
-            setTimeout(() => {
-                playTone(note.freq, 0.8, 'sine');
-            }, note.delay);
-        });
-        
-        // Add dramatic cymbal-like crash
-        setTimeout(() => {
-            playTone(2000, 0.5, 'sawtooth');
-            playTone(3000, 0.3, 'triangle');
-        }, 1000);
-        
-    } catch (error) {
-        console.log('Audio not supported:', error);
     }
 }
 
